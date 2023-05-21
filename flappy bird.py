@@ -22,30 +22,25 @@ pipes = []
 initial_pipe_x = 300
 pipe_spacing = 100
 pipe_height = 250  # Fixed pipe height
-
+pipe_distance = 200  # Distance between the pipes
 
 def create_pipe():
     random_height = random.randint(150, 300)
-    # Gap between the top and bottom pipes
     top_pipe = pygame.Rect(initial_pipe_x, 0, pipe_width, random_height)
     bottom_pipe = pygame.Rect(initial_pipe_x, random_height + pipe_spacing, pipe_width, 500)
     return top_pipe, bottom_pipe
-
 
 def display_pipe(top_pipe, bottom_pipe):
     pygame.draw.rect(screen, pipe_color, top_pipe)
     pygame.draw.rect(screen, pipe_color, bottom_pipe)
 
-
 def display_bird(x, y):
     screen.blit(bird_image, (x, y))
-
 
 def move_pipes():
     for top_pipe, bottom_pipe in pipes:
         top_pipe.x += pipe_x_change
         bottom_pipe.x += pipe_x_change
-
 
 running = True
 clock = pygame.time.Clock()
@@ -64,7 +59,7 @@ while running:
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
-                bird_y_change = 1.5
+                bird_y_change = 2
 
     bird_y += bird_y_change
     if bird_y <= 0:
@@ -86,7 +81,7 @@ while running:
     if len(pipes) > 0 and pipes[0][0].x <= -pipe_width:
         pipes.pop(0)  # Remove pipes that have gone off-screen
 
-    if len(pipes) == 0 or initial_pipe_x - pipes[-1][0].x > 150:  # Spacing between pipes
+    if len(pipes) == 0 or screen.get_width() - pipes[-1][0].x > pipe_distance:  # Distance between pipes
         pipes.append(create_pipe())
 
     pygame.display.update()
